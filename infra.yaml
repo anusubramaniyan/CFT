@@ -1,0 +1,72 @@
+Resources:
+  CPUAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmDescription: Alarm for CPU Utilization
+      Namespace: AWS/EC2
+      MetricName: CPUUtilization
+      Dimensions:
+        - Name: InstanceId
+          Value: i-04c22d9dbaf7bdf46
+      Statistic: Average
+      Period: 300
+      EvaluationPeriods: 1
+      Threshold: 50
+      ComparisonOperator: GreaterThanThreshold
+      AlarmActions:
+        - !Ref CPUAlertTopic
+      TreatMissingData: notBreaching
+  MemoryAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmDescription: Alarm for Memory Utilization
+      Namespace: System/Linux
+      MetricName: MemoryUtilization
+      Dimensions:
+        - Name: InstanceId
+          Value: i-04c22d9dbaf7bdf46
+      Statistic: Average
+      Period: 300
+      EvaluationPeriods: 1
+      Threshold: 50
+      ComparisonOperator: GreaterThanThreshold
+      AlarmActions:
+        - !Ref MemoryAlertTopic
+      TreatMissingData: notBreaching
+  DiskAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmDescription: Alarm for Disk Utilization
+      Namespace: System/Linux
+      MetricName: DiskSpaceUtilization
+      Dimensions:
+        - Name: InstanceId
+          Value: i-04c22d9dbaf7bdf46
+        - Name: Filesystem
+          Value: /
+      Statistic: Average
+      Period: 300
+      EvaluationPeriods: 1
+      Threshold: 50
+      ComparisonOperator: GreaterThanThreshold
+      AlarmActions:
+        - !Ref DiskAlertTopic
+      TreatMissingData: notBreaching
+  CPUAlertTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      Subscription:
+        - Endpoint: anu_subramaniyan@comcast.com
+          Protocol: email
+  MemoryAlertTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      Subscription:
+        - Endpoint: anu_subramaniyan@comcast.com
+          Protocol: email
+  DiskAlertTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      Subscription:
+        - Endpoint: anu_subramaniyan@comcast.com
+          Protocol: email
